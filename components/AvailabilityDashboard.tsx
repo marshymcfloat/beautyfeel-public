@@ -12,6 +12,7 @@ import {
   Clock,
   Stars,
   Calendar,
+  LayoutGrid,
 } from "lucide-react";
 
 type Branch = Database["public"]["Enums"]["branch"];
@@ -122,174 +123,252 @@ export default function AvailabilityDashboard() {
     return (
       <div
         key={slot.slot_time}
-        className={`flex items-center justify-between py-3 px-5 rounded-2xl mb-2 transition-all duration-500 ${
+        className={`flex items-center justify-between py-2.5 px-4 rounded-xl mb-2 transition-all duration-500 group ${
           isFull
-            ? "bg-stone-50 opacity-60"
+            ? "bg-stone-50/50 opacity-60"
             : "bg-white border border-pink-50/50 shadow-sm hover:shadow-md hover:border-pink-200"
         }`}
       >
         <span
-          className={`font-semibold text-lg flex items-baseline gap-1 ${
+          className={`font-semibold text-base flex items-baseline gap-1 ${
             isFull
               ? "text-stone-300 line-through decoration-stone-200"
               : "text-stone-700"
           }`}
         >
           {slot.slot_time.replace(/ [AP]M/, "")}
-          <span className="text-[10px] text-stone-400 font-bold uppercase tracking-wide">
+          <span className="text-[9px] text-stone-400 font-bold uppercase tracking-wide">
             {slot.slot_time.slice(-2)}
           </span>
         </span>
 
         {isFull ? (
-          <span className="text-xs font-bold text-stone-400 bg-stone-100 px-3 py-1.5 rounded-lg">
+          <span className="text-[10px] font-bold text-stone-400 bg-stone-100 px-2 py-1 rounded-md">
             Full
           </span>
         ) : (
           <div
-            className={`transition-all duration-300 flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold ${
+            className={`transition-all duration-300 flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold ${
               isLow
                 ? "bg-amber-50 text-amber-700 border border-amber-100"
                 : "bg-emerald-50 text-emerald-700 border border-emerald-100"
             }`}
           >
             <div
-              className={`w-2 h-2 rounded-full ${
+              className={`w-1.5 h-1.5 rounded-full ${
                 isLow ? "bg-amber-500 animate-pulse" : "bg-emerald-500"
               }`}
             ></div>
-            {slot.available_spots === 1
-              ? "1 Spot Left"
-              : `${slot.available_spots} Spots`}
+            {slot.available_spots === 1 ? "1 Left" : `${slot.available_spots}`}
           </div>
         )}
       </div>
     );
   };
 
+  const TimeSection = ({
+    title,
+    icon: Icon,
+    colorClass,
+    data,
+    delay,
+  }: {
+    title: string;
+    icon: any;
+    colorClass: string;
+    data: AvailabilitySlot[];
+    delay: string;
+  }) => {
+    if (data.length === 0) return null;
+    return (
+      <section
+        className={`flex-1 min-w-[280px] animate-in fade-in slide-in-from-bottom-4 duration-500 ${delay}`}
+      >
+        <div
+          className={`flex items-center gap-2 mb-3 ${colorClass} text-[11px] font-black uppercase tracking-widest pl-1`}
+        >
+          <Icon className="w-3.5 h-3.5" /> {title}
+        </div>
+        <div className="space-y-1">{data.map(renderSlot)}</div>
+      </section>
+    );
+  };
+
   return (
-    <div className="w-full max-w-md mx-auto bg-white/40 backdrop-blur-xl min-h-screen sm:min-h-[700px] sm:rounded-[3rem] overflow-hidden relative border border-white/50 shadow-2xl shadow-pink-100/50">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-pink-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+    <div className="w-full max-w-md md:max-w-7xl mx-auto bg-white/40 backdrop-blur-xl md:min-h-[700px] h-screen md:h-auto rounded-none md:rounded-[2.5rem] overflow-hidden relative border-x md:border border-white/50 shadow-2xl shadow-pink-100/50 flex flex-col md:flex-row">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-pink-100/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-100/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
-      <div className="relative z-10 bg-white/60 backdrop-blur-md px-6 pt-8 pb-4 rounded-b-4xl border-b border-white/50">
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <h1 className="text-2xl font-light text-stone-800 flex items-center gap-2 tracking-tight">
-              Live Vibe{" "}
-              <Sparkles className="w-5 h-5 text-pink-400 fill-pink-50" />
-            </h1>
-            <p className="text-stone-500 text-xs font-medium mt-1 uppercase tracking-widest">
-              Real-time Capacity
-            </p>
-          </div>
+      <div className="md:w-[320px] shrink-0 bg-white/60 backdrop-blur-md p-6 md:p-8 md:border-r border-b md:border-b-0 border-white/50 flex flex-col md:h-auto z-20">
+        <div className="mb-6 md:mb-10">
+          <h1 className="text-2xl font-light text-stone-800 flex items-center gap-2 tracking-tight">
+            Live Vibe{" "}
+            <Sparkles className="w-5 h-5 text-pink-400 fill-pink-50" />
+          </h1>
+          <p className="text-stone-500 text-xs font-medium mt-1 uppercase tracking-widest">
+            Real-time Capacity
+          </p>
+        </div>
 
-          <div className="relative group">
-            <div className="flex items-center gap-2 bg-white hover:bg-white/80 border border-stone-100 hover:border-pink-200 px-4 py-2 rounded-full cursor-pointer transition-all duration-200 shadow-sm">
-              <Calendar className="w-3.5 h-3.5 text-pink-400" />
-              <span className="text-sm font-bold text-stone-600">
-                {isToday ? "Today" : displayDate}
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 text-stone-400 rotate-90" />
+        <div className="relative group mb-6 md:mb-8">
+          <label className="text-[10px] uppercase font-bold text-stone-400 mb-2 block tracking-wider">
+            Select Date
+          </label>
+          <div className="flex items-center justify-between bg-white hover:bg-white/80 border border-stone-100 hover:border-pink-200 px-4 py-3 rounded-2xl cursor-pointer transition-all duration-200 shadow-sm group-hover:shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="bg-pink-50 p-2 rounded-lg text-pink-500">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="block text-xs font-medium text-stone-400">
+                  {isToday ? "Today" : "Selected"}
+                </span>
+                <span className="text-sm font-bold text-stone-700">
+                  {displayDate}
+                </span>
+              </div>
             </div>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-            />
+            <ChevronRight className="w-4 h-4 text-stone-400 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+          />
+        </div>
+
+        <div className="flex-1">
+          <label className="text-[10px] uppercase font-bold text-stone-400 mb-2 block tracking-wider hidden md:block">
+            Departments
+          </label>
+          <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-hide -mx-6 px-6 md:mx-0 md:px-0">
+            {BRANCHES.map((branch) => (
+              <button
+                key={branch}
+                onClick={() => setActiveBranch(branch)}
+                className={`shrink-0 flex items-center justify-between px-4 py-3 rounded-xl md:rounded-2xl text-xs font-bold tracking-widest transition-all duration-300 w-auto md:w-full ${
+                  activeBranch === branch
+                    ? "bg-pink-950 text-white shadow-lg shadow-pink-900/10 scale-100 ring-2 ring-offset-2 ring-pink-950/10"
+                    : "bg-white text-stone-400 border border-stone-100 hover:border-pink-200 hover:text-pink-500 hover:shadow-sm"
+                }`}
+              >
+                <span>{branch}</span>
+                {activeBranch === branch && (
+                  <div className="w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.8)] hidden md:block"></div>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6 no-scrollbar">
-          {BRANCHES.map((branch) => (
-            <button
-              key={branch}
-              onClick={() => setActiveBranch(branch)}
-              className={`shrink-0 md:px-4 px-3 py-2.5 rounded-full text-xs font-bold tracking-widest transition-all duration-300 ${
-                activeBranch === branch
-                  ? "bg-pink-950 text-white shadow-lg shadow-pink-900/10 scale-100"
-                  : "bg-white text-stone-400 border border-stone-100 hover:border-pink-200 hover:text-pink-500"
-              }`}
-            >
-              {branch}
-            </button>
-          ))}
+        <div className="hidden md:block mt-auto pt-6 border-t border-stone-100">
+          <div className="flex flex-col gap-3 text-[10px] font-bold text-stone-400 uppercase tracking-wide">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Open
+              for Booking
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>{" "}
+              Limited Spots
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-stone-300"></span> Fully
+              Booked
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="relative z-0 px-6 py-6 space-y-8 pb-24 overflow-y-auto h-[calc(100vh-180px)] sm:h-auto">
-        {initialLoading ? (
-          <div className="flex flex-col items-center justify-center pt-20 text-stone-300 animate-pulse space-y-4">
-            <Clock className="w-10 h-10 opacity-30" />
-            <div className="h-4 w-32 bg-stone-100 rounded"></div>
-            <div className="space-y-2 w-full max-w-[200px]">
-              <div className="h-10 bg-white/50 rounded-xl"></div>
-              <div className="h-10 bg-white/50 rounded-xl"></div>
-              <div className="h-10 bg-white/50 rounded-xl"></div>
+      <div className="flex-1 relative overflow-hidden flex flex-col h-full bg-white/30">
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 scrollbar-thin scrollbar-thumb-stone-200 scrollbar-track-transparent">
+          {initialLoading ? (
+            <div className="h-full flex flex-col items-center justify-center text-stone-300 animate-pulse space-y-6">
+              <div className="bg-white/50 p-6 rounded-full">
+                <Clock className="w-12 h-12 opacity-30" />
+              </div>
+              <div className="text-center">
+                <div className="h-4 w-32 bg-stone-200/50 rounded mx-auto mb-2"></div>
+                <p className="text-xs font-medium opacity-60">
+                  Syncing with schedule...
+                </p>
+              </div>
             </div>
-          </div>
-        ) : slots.length === 0 ? (
-          <div className="text-center pt-20 text-stone-400">
-            <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-stone-50 shadow-sm">
-              <Moon className="w-8 h-8 text-stone-300" />
+          ) : slots.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-stone-400">
+              <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mb-6 border border-stone-50 shadow-sm">
+                <Moon className="w-10 h-10 text-stone-300" />
+              </div>
+              <h3 className="font-semibold text-lg text-stone-700">
+                All Quiet
+              </h3>
+              <p className="text-sm mt-1 mb-2">
+                No availability found for {activeBranch.toLowerCase()}.
+              </p>
+              <p className="text-xs bg-stone-100 px-3 py-1 rounded-full">
+                Try selecting a different date
+              </p>
             </div>
-            <p className="font-medium text-stone-600">No availability found.</p>
-            <p className="text-xs mt-1">
-              The shop might be closed or fully booked.
-            </p>
+          ) : (
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-lg font-bold text-stone-700 flex items-center gap-2">
+                  <LayoutGrid className="w-4 h-4 text-stone-400" />
+                  Available Slots
+                </h2>
+                <span className="text-xs font-medium text-stone-400 bg-white/60 px-3 py-1 rounded-full border border-stone-100">
+                  {slots.filter((s) => s.available_spots > 0).length} Openings
+                  Found
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-10">
+                <TimeSection
+                  title="Late Night"
+                  icon={Stars}
+                  colorClass="text-purple-400"
+                  data={groupedSlots.lateNight}
+                  delay="delay-0"
+                />
+                <TimeSection
+                  title="Morning"
+                  icon={Coffee}
+                  colorClass="text-rose-400"
+                  data={groupedSlots.morning}
+                  delay="delay-75"
+                />
+                <TimeSection
+                  title="Afternoon"
+                  icon={Sun}
+                  colorClass="text-amber-500"
+                  data={groupedSlots.afternoon}
+                  delay="delay-100"
+                />
+                <TimeSection
+                  title="Evening"
+                  icon={Moon}
+                  colorClass="text-pink-900"
+                  data={groupedSlots.evening}
+                  delay="delay-150"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="md:hidden bg-white/80 backdrop-blur-md border-t border-white/50 p-4 text-center z-20">
+          <div className="flex justify-center gap-6 text-[10px] font-bold text-stone-400 uppercase tracking-wide">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-stone-300"></span> Full
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-400"></span>{" "}
+              Limited
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Open
+            </span>
           </div>
-        ) : (
-          <>
-            {groupedSlots.lateNight.length > 0 && (
-              <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="flex items-center gap-2 mb-3 text-purple-400 text-[10px] font-black uppercase tracking-widest pl-1">
-                  <Stars className="w-3 h-3" /> Late Night
-                </div>
-                {groupedSlots.lateNight.map(renderSlot)}
-              </section>
-            )}
-
-            {groupedSlots.morning.length > 0 && (
-              <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-75">
-                <div className="flex items-center gap-2 mb-3 text-rose-400 text-[10px] font-black uppercase tracking-widest pl-1">
-                  <Coffee className="w-3 h-3" /> Morning
-                </div>
-                {groupedSlots.morning.map(renderSlot)}
-              </section>
-            )}
-
-            {groupedSlots.afternoon.length > 0 && (
-              <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
-                <div className="flex items-center gap-2 mb-3 text-amber-500 text-[10px] font-black uppercase tracking-widest pl-1">
-                  <Sun className="w-3 h-3" /> Afternoon
-                </div>
-                {groupedSlots.afternoon.map(renderSlot)}
-              </section>
-            )}
-
-            {groupedSlots.evening.length > 0 && (
-              <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
-                <div className="flex items-center gap-2 mb-3 text-pink-900 text-[10px] font-black uppercase tracking-widest pl-1">
-                  <Moon className="w-3 h-3" /> Evening
-                </div>
-                {groupedSlots.evening.map(renderSlot)}
-              </section>
-            )}
-          </>
-        )}
-      </div>
-
-      <div className="absolute bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-white/50 p-4 pb-6 text-center z-20">
-        <div className="flex justify-center gap-6 text-[10px] font-bold text-stone-400 uppercase tracking-wide">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-stone-300"></span> Full
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-400"></span> Limited
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Open
-          </span>
         </div>
       </div>
     </div>

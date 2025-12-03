@@ -4,10 +4,16 @@ import { Sparkles } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
+export const revalidate = 3600; // Revalidate every hour
+
 export const metadata = {
   title: "Our Services | BeautyFeel",
   description:
     "Explore our range of premium beauty services including nails, skin, lashes, and massage.",
+  openGraph: {
+    title: "Our Services | BeautyFeel",
+    description: "Explore our range of premium beauty services including nails, skin, lashes, and massage.",
+  }
 };
 
 function ServicesSkeleton() {

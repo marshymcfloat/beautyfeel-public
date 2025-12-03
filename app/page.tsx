@@ -4,6 +4,8 @@ import { Clock, MapPin, ArrowRight } from "lucide-react";
 import ActivePromos from "@/components/ActivePromos";
 import PromoSkeleton from "@/components/PromoSkeleton";
 
+export const revalidate = 3600; // Revalidate every hour
+
 export default function Home() {
   return (
     <main className="min-h-screen w-full bg-linear-to-b from-[#FFF0F5] via-[#FFF5F7] to-white relative">

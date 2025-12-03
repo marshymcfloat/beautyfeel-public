@@ -51,10 +51,10 @@ export default function Home() {
             <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-5 shadow-sm">
               <Clock className="w-6 h-6 text-pink-400" />
             </div>
-            <h3 className="font-bold text-xl mb-2 text-stone-800">
+            <h2 className="font-bold text-xl mb-2 text-stone-800">
               Operating Hours
-            </h3>
-            <p className="text-stone-500 text-sm mb-4">
+            </h2>
+            <p className="text-stone-600 text-sm mb-4">
               Open 10:00 AM to 8:00 PM Daily
             </p>
             <div className="inline-block bg-pink-50 border border-pink-100 text-pink-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide">
@@ -72,8 +72,8 @@ export default function Home() {
             <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-5 shadow-sm">
               <MapPin className="w-6 h-6 text-emerald-500" />
             </div>
-            <h3 className="font-bold text-xl mb-2 text-stone-800">Visit Us</h3>
-            <p className="text-stone-500 text-sm mb-6">
+            <h2 className="font-bold text-xl mb-2 text-stone-800">Visit Us</h2>
+            <p className="text-stone-600 text-sm mb-6">
               Face • Skin • Nails • Massage
             </p>
             <a

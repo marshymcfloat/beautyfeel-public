@@ -30,7 +30,7 @@ export default async function ActivePromos() {
           <Sparkles className="w-6 h-6 text-white" />
         </div>
 
-        <h3 className="font-bold text-xl mb-2 tracking-tight">Stay Tuned!</h3>
+        <h2 className="font-bold text-xl mb-2 tracking-tight">Stay Tuned!</h2>
         <p className="text-white/90 text-sm leading-relaxed">
           Follow our Facebook page for upcoming flash sales and exclusive
           seasonal offers.
@@ -59,9 +59,9 @@ export default async function ActivePromos() {
             </Badge>
           )}
 
-          <h3 className="font-bold text-2xl mb-2 tracking-tight leading-tight">
+          <h2 className="font-bold text-2xl mb-2 tracking-tight leading-tight">
             {promo.name}
-          </h3>
+          </h2>
 
           <p className="text-white/90 text-sm mb-4 line-clamp-2">
             {promo.description || "Limited time offer! Visit us today."}

@@ -73,7 +73,7 @@ export default function Navbar() {
             <span className="text-lg font-bold tracking-widest text-stone-800 group-hover:text-pink-500 transition-colors">
               BEAUTYFEEL
             </span>
-            <span className="text-[9px] text-stone-400 uppercase tracking-[0.2em]">
+            <span className="text-[9px] text-stone-500 uppercase tracking-[0.2em]">
               The Beauty Lounge
             </span>
           </div>
@@ -87,7 +87,7 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 href={link.path}
-                className="relative text-sm uppercase tracking-wide py-1 font-medium text-stone-500 hover:text-pink-500 transition-colors"
+                className="relative text-sm uppercase tracking-wide py-1 font-medium text-stone-600 hover:text-pink-500 transition-colors"
               >
                 <span className={isActive ? "text-pink-600 font-bold" : ""}>
                   {link.name}
@@ -121,6 +121,7 @@ export default function Navbar() {
           whileTap={{ scale: 0.9 }}
           className="md:hidden text-stone-600"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           <AnimatePresence mode="wait" initial={false}>
             {isOpen ? (
